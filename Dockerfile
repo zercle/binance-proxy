@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Builder from adrianceding/binance-proxy
-FROM golang:1.17 AS builder
+FROM golang AS builder
 ARG LATEST_TAG=v1.5.1
 ENV BUILD_TAG $LATEST_TAG
 WORKDIR /src/app
