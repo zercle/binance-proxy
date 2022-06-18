@@ -17,8 +17,8 @@ docker run -d -p 8090:8090 -p 8091:8091 --restart always zercle/binance-proxy
             "timeout": 60000,
             "urls": {
                 "api": {
-                    "public": "http://127.0.01:8090/api/v3", # spot add this 
-                    "fapiPublic": "http://127.0.01:8091/fapi/v1" # futures add this
+                    "public": "http://127.0.0.1:8090/api/v3", # spot add this 
+                    "fapiPublic": "http://127.0.0.1:8091/fapi/v1" # futures add this
                 }
             }
         },
