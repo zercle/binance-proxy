@@ -7,29 +7,18 @@ WORKDIR /src/app
 RUN git clone --depth 1 --branch ${BUILD_TAG} https://github.com/adrianceding/binance-proxy.git && cd binance-proxy/src/binance-proxy && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /src/app/dist/binance-proxy .
 
 # Container from builder
-FROM alpine
+FROM debian:stable-slim
 LABEL maintainer="Kawin Viriyaprasopsook <kawin.vir@zercle.tech>"
 
 ARG	timezone=Asia/Bangkok
 
-ENV	LANG en_US.UTF-8
-ENV	LC_ALL en_US.UTF-8
+ENV	LANG C.UTF-8
+ENV	LC_ALL C.UTF-8
 ENV	TZ $timezone
 
-# Add config repositories
-RUN	echo 'https://dl-cdn.alpinelinux.org/alpine/latest-stable/main' > /etc/apk/repositories \
-  && echo 'https://dl-cdn.alpinelinux.org/alpine/latest-stable/community' >> /etc/apk/repositories \
-  && mkdir /run/openrc \
-  && touch /run/openrc/softlevel
-
 # Update OS
-RUN	apk update && apk upgrade \
-  && apk add --no-cache \
-  openrc \
-  tzdata \
-  bash \
-  bash-completion \
-  ca-certificates
+RUN	apt update && apt -y full-upgrade \
+  && apt -y install locales tzdata net-tools bash-completion ca-certificates
 
 # Change locale
 RUN echo $timezone > /etc/timezone \
