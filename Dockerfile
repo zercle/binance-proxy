@@ -1,10 +1,8 @@
 # syntax=docker/dockerfile:1
 # Builder from adrianceding/binance-proxy
 FROM golang AS builder
-ARG LATEST_TAG=v1.5.1
-ENV BUILD_TAG $LATEST_TAG
 WORKDIR /src/app
-RUN git clone --depth 1 --branch ${BUILD_TAG} https://github.com/adrianceding/binance-proxy.git && cd binance-proxy/src/binance-proxy && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /src/app/dist/binance-proxy .
+RUN git clone --depth 1 --branch $(curl --silent "https://api.github.com/repos/traefik/traefik/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') https://github.com/adrianceding/binance-proxy.git && cd binance-proxy/src/binance-proxy && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /src/app/dist/binance-proxy .
 
 # Container from builder
 FROM debian:stable-slim
